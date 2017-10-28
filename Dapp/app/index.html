@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Copyright DApp</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+</head>
+
+<body class="container">
+    <h1>Immutable Copyright'ing Application for Ethereum</h1>
+    <div id="address"></div>
+    <div class="table-responsive">
+        <table id="mytable" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Doc Name</th>
+                    <th>Doc Type</th>
+                    <th>Doc URL</th>
+                    <th>Doc SHA</th>
+                    <th>Doc Created Timestamp</th>
+                    <th>Doc Updated Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="msg"></div><br>
+    </div>
+
+
+    <label for="uploadForm">Select Document</label>
+    <form ref="uploadForm" id="uploadForm" name="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="foo" id="foo">
+    </form>
+
+    <input type="text" id="docname" placeholder="Enter Document Name">
+    <input type="text" id="doctype" placeholder="Enter Document Type">
+    <input type="text" id="docurl" placeholder="Enter Document URL">
+    <input type="text" id="docsha" placeholder="Enter Document SHA">
+    <input type="text" id="doccreatedts" placeholder="Enter Document Created Timestamp">
+    <input type="text" id="docupdatedts" placeholder="Enter Document Updated Timestamp">
+    <br>
+    <br>
+    <a href="#" onclick="addCopyright()" class="btn btn-primary">Add Immutable Copyright</a>
+
+</body>
+<script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>-->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc1.min.js"></script>
+
+<script src="app.js"></script>
+
+</html>
