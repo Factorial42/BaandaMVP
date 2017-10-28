@@ -11,7 +11,7 @@
     <h1>Immutable Copyright'ing Application for Ethereum</h1>
     <div id="address"></div>
     <div class="table-responsive">
-        <table id="mytable" class="table table-bordered">
+        <table id="mytable" class="table table-bordered" style="width:98% !important; ">
             <thead>
                 <tr>
                     <th>Doc Name</th>
@@ -20,6 +20,8 @@
                     <th>Doc SHA</th>
                     <th>Doc Created Timestamp</th>
                     <th>Doc Updated Timestamp</th>
+                    <th>View/Delete?</th>
+                    <th>View/View?</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,7 +43,7 @@
     <input type="text" id="docupdatedts" placeholder=" Document Updated Timestamp" disabled>
     <br>
     <br>
-    <a href="#" onclick="addCopyright()" class="btn btn-primary">Add Immutable Copyright</a>
+    <a href="#" id="addCopyright" onclick="addCopyright()" class="btn btn-primary disabled">Add Immutable Copyright</a>
 
 </body>
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>

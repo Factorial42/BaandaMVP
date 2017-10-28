@@ -23,15 +23,24 @@ var Copyright = contract(copyright_artifacts);
 
 //setup test records
 
-window.deleteAllCopyrights = function(_theAddress) {
-    let ownerAdd = $("#ownerAddress").val();
-    console.log("Owner address is:" + ownerAdd);
+window.deleteCopyright = function(elem) {
+    let ownerAdd = "0xFd4060dC3b64Ec310CaDc6d6A850B9b31281D4C3";//web3.eth.accounts[0];
+    let docName = elem.id;
+    console.log("Delete Copyright with name: *" + docName + "* and owner add: " + ownerAdd);
     try {
-        $("#msg").html("Delete all copyrights has been submitted. The table will refresh once the deletion is recorded on the blockchain. Please wait...")
-        $("#docName").val("");
+        $("#msg").html("Delete copyright has been submitted for *" + docName +" *. The table will refresh once the deletion is recorded on the blockchain. Please wait...").css({
+            'color': 'green',
+            'font-size': '110%'
+        });
 
         Copyright.deployed().then(function(contractInstance) {
-            contractInstance.deleteAllContracts(ownerAdd);
+            contractInstance.deleteContract(ownerAdd,docName,{
+                gas: 500000,
+                from: web3.eth.accounts[0]
+            }).then(function() {
+            $("#msg").html("Document *" + docName + "* has been successfully deleted from blockchain!");
+            removeRecord(docName);
+          });
         });
     } catch (err) {
         console.log(err);
@@ -63,6 +72,8 @@ window.addCopyright = function(docname) {
                     populateTable(v);
                     $("#msg").html("Document *" + v[0] + "* has been successfully recorded onto blockchain!");
                     clearNewRecord();
+                    $("#addCopyright").removeClass("btn btn-primary");
+                    $("#addCopyright").addClass("btn btn-primary disabled");
                 });
             });
         });
@@ -101,13 +112,23 @@ $(document).ready(function() {
 });
 
 function populateTable(v) {
-    var beginTag = "<tr><td>";
+    var beginTag = "<tr id='doc_" + v[0] + "'><td>";
     var endTag = "</td></tr>";
     var midTag = "</td><td>";
 
-    var html = beginTag + v[0] + midTag + v[1] + midTag + v[2] + midTag + v[3] + midTag + new Date(v[4] * 1000) + midTag + new Date(v[5] * 1000) + endTag;
+
+    var view = "<a href='" + v[2] + "' class='btn btn-primary' target='_blank'>View</a>";
+    var link = "<a href='#' id='" + v[0] + "' onclick='deleteCopyright(this);' class='btn btn-primary'>Delete</a>";
+    var html = beginTag + v[0] + midTag + v[1] + midTag + v[2] + midTag + v[3].substring(0,10) + "..." + midTag + new Date(v[4] * 1000).toISOString() + midTag + new Date(v[5] * 1000).toISOString()  + midTag + link + midTag + view + endTag;
     $('#mytable tbody').append(html);
 }
+
+function removeRecord(docName){
+  console.log("removing record with name: " + docName);
+//  $('#doc_' + docName).remove();
+  location.reload();
+  }
+
 
 function clearNewRecord() {
     $("#docname").val("");
@@ -145,6 +166,8 @@ $("#foo").on("change", function(e) {
             if (msg != null) {
                 $("#docurl").val(msg.s3path);
                 $("#docsha").val(msg.SHA256);
+                $("#addCopyright").removeClass("btn btn-primary disabled");
+                $("#addCopyright").addClass("btn btn-primary");
             }
         },
         error: function(e) {
