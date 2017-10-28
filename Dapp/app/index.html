@@ -29,17 +29,16 @@
     </div>
 
 
-    <label for="uploadForm">Select Document</label>
     <form ref="uploadForm" id="uploadForm" name="uploadForm" enctype="multipart/form-data">
         <input type="file" name="foo" id="foo">
     </form>
 
-    <input type="text" id="docname" placeholder="Enter Document Name">
-    <input type="text" id="doctype" placeholder="Enter Document Type">
-    <input type="text" id="docurl" placeholder="Enter Document URL">
-    <input type="text" id="docsha" placeholder="Enter Document SHA">
-    <input type="text" id="doccreatedts" placeholder="Enter Document Created Timestamp">
-    <input type="text" id="docupdatedts" placeholder="Enter Document Updated Timestamp">
+    <input type="text" id="docname" placeholder=" Document Name" disabled>
+    <input type="text" id="doctype" placeholder=" Document Type" disabled>
+    <input type="text" id="docurl" placeholder=" Document URL" disabled>
+    <input type="text" id="docsha" placeholder=" Document SHA" disabled>
+    <input type="text" id="doccreatedts" placeholder=" Document Created Timestamp" disabled>
+    <input type="text" id="docupdatedts" placeholder=" Document Updated Timestamp" disabled>
     <br>
     <br>
     <a href="#" onclick="addCopyright()" class="btn btn-primary">Add Immutable Copyright</a>

@@ -9,9 +9,7 @@
   },
   "author": "M.Reddy",
   "license": "MIT",
-  "devDependencies": {
-    "nodemon": "^1.12.1"
-  },
+  "devDependencies": {},
   "dependencies": {
     "async-await": "^0.1.40",
     "aws-sdk": "^2.141.0",

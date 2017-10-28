@@ -9,6 +9,7 @@ import {
     default as contract
 } from 'truffle-contract'
 
+
 /*
  * When you compile and deploy your Copyright contract,
  * truffle stores the abi and deployed address in a json
@@ -16,7 +17,6 @@ import {
  * to setup a Copyright abstraction. We will use this abstraction
  * later to create an instance of the Copyright contract.
  */
-
 import copyright_artifacts from '../../build/contracts/Copyright.json'
 
 var Copyright = contract(copyright_artifacts);
