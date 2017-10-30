@@ -55,6 +55,8 @@ window.addCopyright = function(docname) {
             'color': 'green',
             'font-size': '110%'
         });
+        $("#addCopyright").removeClass("btn btn-primary");
+        $("#addCopyright").addClass("btn btn-primary disabled");
 
         /* Copyright.deployed() returns an instance of the contract. Every call
          * in Truffle returns a promise which is why we have used then()
@@ -72,8 +74,6 @@ window.addCopyright = function(docname) {
                     populateTable(v);
                     $("#msg").html("Document *" + v[0] + "* has been successfully recorded onto blockchain!");
                     clearNewRecord();
-                    $("#addCopyright").removeClass("btn btn-primary");
-                    $("#addCopyright").addClass("btn btn-primary disabled");
                 });
             });
         });
@@ -210,3 +210,64 @@ $("#foo").on("change", function() {
 function getTS() {
     return Math.floor(new Date() / 1000);
 }
+
+//Enable for Stripe Integration
+/*
+//String functionality goes here// Create a Stripe client
+var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+
+// Create an instance of Elements
+var elements = stripe.elements();
+
+// Custom styling can be passed to options when creating an Element.
+// (Note that this demo uses a wider set of styles than the guide below.)
+var style = {
+  base: {
+    color: '#32325d',
+    lineHeight: '24px',
+    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+    fontSmoothing: 'antialiased',
+    fontSize: '16px',
+    '::placeholder': {
+      color: '#aab7c4'
+    }
+  },
+  invalid: {
+    color: '#fa755a',
+    iconColor: '#fa755a'
+  }
+};
+
+// Create an instance of the card Element
+var card = elements.create('card', {style: style});
+
+// Add an instance of the card Element into the `card-element` <div>
+card.mount('#card-element');
+
+// Handle real-time validation errors from the card Element.
+card.addEventListener('change', function(event) {
+  var displayError = document.getElementById('card-errors');
+  if (event.error) {
+    displayError.textContent = event.error.message;
+  } else {
+    displayError.textContent = '';
+  }
+});
+
+// Handle form submission
+var form = document.getElementById('payment-form');
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  stripe.createToken(card).then(function(result) {
+    if (result.error) {
+      // Inform the user if there was an error
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = result.error.message;
+    } else {
+      // Send the token to your server
+      stripeTokenHandler(result.token);
+    }
+  });
+});
+*/
