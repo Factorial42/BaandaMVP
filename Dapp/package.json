@@ -30,8 +30,10 @@
     "json-loader": "^0.5.7",
     "style-loader": "^0.13.2",
     "truffle-contract": "^1.1.11",
-    "web3": "^0.18.4",
     "webpack": "^2.7.0",
     "webpack-dev-server": "^2.9.3"
+  },
+  "dependencies": {
+    "truffle-hdwallet-provider": "0.0.3"
   }
 }

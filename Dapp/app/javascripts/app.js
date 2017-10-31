@@ -74,6 +74,8 @@ window.addCopyright = function(docname) {
                     populateTable(v);
                     $("#msg").html("Document *" + v[0] + "* has been successfully recorded onto blockchain!");
                     clearNewRecord();
+                    $("#foo").val("");
+
                 });
             });
         });
