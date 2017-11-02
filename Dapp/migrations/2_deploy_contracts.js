@@ -8,5 +8,5 @@ module.exports = function(deployer) {
   deployer.link(ConvertLib, MetaCoin);
   deployer.deploy(MetaCoin);
   */
-  deployer.deploy(Copyright);
+  deployer.deploy(Copyright,"reddy@f42labs.com");
 };

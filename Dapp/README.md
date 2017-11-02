@@ -27,3 +27,5 @@ ERROR in ./app/main.js
 Module not found: Error: Can't resolve '../build/contracts/MetaCoin.json' in '/Users/tim/Documents/workspace/Consensys/test3/app'
  @ ./app/main.js 11:16-59
 ```
+#unlock account
+web3.personal.unlockAccount('0xFd4060dC3b64Ec310CaDc6d6A850B9b31281D4C3', 'mpreddy77', 15000)

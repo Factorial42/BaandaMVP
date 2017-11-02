@@ -103,6 +103,9 @@ $(document).ready(function() {
         contractInstance.getContractCount().then(function(count) {
             contractCount = count.toNumber();
             console.log("Record Count is " + contractCount);
+            contractInstance.getOwner().then(function(owner){
+              console.log("Owner is " + owner);
+            });
             for (var i = 0; i < contractCount; i++) {
                 contractInstance.getContractByIndex(i).then(function(v) {
                     populateTable(v);

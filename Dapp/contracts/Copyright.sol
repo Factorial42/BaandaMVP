@@ -9,8 +9,9 @@ contract Copyright {
     address theOwnerAddress;
     string theOwnerEmail;
 
-    function Copyright() {
+    function Copyright(string _email) {
         theOwnerAddress = msg.sender;
+        theOwnerEmail = _email;
     }
 
     function setOwner(string _email) public returns(bool) {
