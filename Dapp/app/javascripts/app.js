@@ -44,11 +44,11 @@ window.deleteCopyright = function(elem) {
     } catch (err) {
         console.log(err);
     }
-/*
+
     console.log("Deleting via /delete from M & S3")
     $.ajax({
       url: 'http://localhost:3000/delete/' + docName,
-      type: 'POST',
+      type: 'GET',
       data: "", //new FormData( $("#uploadForm") ),
       processData: false,
       contentType: false,
@@ -60,7 +60,6 @@ window.deleteCopyright = function(elem) {
       }
     });
     //e.preventDefault();
-    */
 }
 
 window.addCopyright = function(docname) {
@@ -122,10 +121,11 @@ $(document).ready(function() {
             contractInstance.getOwner().then(function(owner){
               console.log("Owner is " + owner);
               ownerAdd = owner[0];
+              populateOwner(owner);
             });
             for (var i = 0; i < contractCount; i++) {
                 contractInstance.getContractByIndex(i).then(function(v) {
-                    populateTable(v);
+                  populateTable(v);
                     //console.log(" Contract " + i + " is : " + JSON.stringify(v, null, 2));
                 });
             }
@@ -143,6 +143,10 @@ function populateTable(v) {
     var link = "<a href='#' id='" + v[0] + "' onclick='deleteCopyright(this);' class='btn btn-primary'>Delete</a>";
     var html = beginTag + v[0] + midTag + v[1] + midTag + v[2] + midTag + v[3].substring(0,10) + "..." + midTag + new Date(v[4] * 1000).toISOString() + midTag + new Date(v[5] * 1000).toISOString()  + midTag + link + midTag + view + endTag;
     $('#mytable tbody').append(html);
+}
+
+function populateOwner(v) {
+  jQuery("label[for='docOwner']").html('This contract is owned by address*' + v[0] + '* and email *' + v[1] + '*');
 }
 
 function removeRecord(docName){

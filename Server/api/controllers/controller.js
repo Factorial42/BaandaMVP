@@ -23,25 +23,30 @@ exports.list_all_docs = function(req, res) {
 };
 
 //delete a doc by name or id
-exports.remove_a_doc = function (req,res){
-  var docId = req.params.docId;
-
-  var type;
-  if (objectID.isValid(docId)){
-    type="_id";
-    docId = require('mongodb').ObjectID(docId);
-    console.log ("OBJECTID is valid " + docId);
-  }
-  else
-    type="name";
-
-  Doc.remove({type:docId}, function(err, doc) {
-      if (err)
-          res.send(err);
-      res.json({
-          message: 'Doc successfully deleted with ID/Name *' + req.params.docId
-      });
-  });
+exports.remove_a_doc = function(req, res) {
+    var docId = req.params.docId;
+    console.log('Doc successfully deleted with ID/Name *' + docId);
+    if (objectID.isValid(docId)) {
+        Doc.remove({
+            _id: docId
+        }, function(err, doc) {
+            if (err)
+                console.log(err);
+            res.json({
+                message: 'Doc successfully deleted with ID *' + docId
+            });
+        });
+    } else {
+        Doc.remove({
+            name: docId
+        }, function(err, doc) {
+            if (err)
+                console.log(err);
+            res.json({
+                message: 'Doc successfully deleted with name *' + docId
+            });
+        });
+    }
 }
 
 exports.upload_a_doc = function(req, res) {
