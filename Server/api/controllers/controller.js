@@ -1,6 +1,6 @@
 'use strict';
 const UTIL = require('../utils/util.js');
-
+var objectID = require('mongodb').ObjectID;
 var mongoose = require('mongoose'),
     Doc = mongoose.model('Doc');
 
@@ -8,9 +8,41 @@ exports.list_all_docs = function(req, res) {
     Doc.find({}, function(err, doc) {
         if (err)
             res.send(err);
-        res.json(doc);
+
+        var arr = [];
+        for (var i = 0; i < doc.length; i++) {
+            var myObj = new Object();
+            myObj.id = doc[i]._id;
+            myObj.name = doc[i].name;
+            myObj.s3path = doc[i].s3path;
+            myObj.created_date = doc[i].created_date;
+            arr.push(myObj);
+        }
+        res.json(arr);
     });
 };
+
+//delete a doc by name or id
+exports.remove_a_doc = function (req,res){
+  var docId = req.params.docId;
+
+  var type;
+  if (objectID.isValid(docId)){
+    type="_id";
+    docId = require('mongodb').ObjectID(docId);
+    console.log ("OBJECTID is valid " + docId);
+  }
+  else
+    type="name";
+
+  Doc.remove({type:docId}, function(err, doc) {
+      if (err)
+          res.send(err);
+      res.json({
+          message: 'Doc successfully deleted with ID/Name *' + req.params.docId
+      });
+  });
+}
 
 exports.upload_a_doc = function(req, res) {
     if (!req.files)
@@ -47,14 +79,14 @@ exports.upload_a_doc = function(req, res) {
 
         //Save doc to Mongo
         _doc.save(function(err, _doc) {
-            if (err){
+            if (err) {
                 res.send(err);
                 console.log("ERROR ::" + err);
                 //res.send(_doc);
-              }
+            }
 
-              //do other custom processing
-              UTIL.print(_doc);
+            //do other custom processing
+            UTIL.print(_doc);
         });
     });
 }

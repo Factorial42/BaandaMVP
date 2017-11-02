@@ -2,8 +2,15 @@
 module.exports = function(app) {
   var docList = require('../controllers/controller');
 
-app.route('/upload')
+  app.route('/upload')
   .post(docList.upload_a_doc);
+
+  app.route('/delete/:docId')
+  .get(docList.remove_a_doc);
+
+  app.route('/delete/:docName')
+  .get(docList.remove_a_doc);
+
 
   // Routes
   app.route('/docs')

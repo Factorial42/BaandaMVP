@@ -20,11 +20,10 @@ import {
 import copyright_artifacts from '../../build/contracts/Copyright.json'
 
 var Copyright = contract(copyright_artifacts);
-
+let ownerAdd = web3.eth.accounts[0];
 //setup test records
 
 window.deleteCopyright = function(elem) {
-    let ownerAdd = "0xFd4060dC3b64Ec310CaDc6d6A850B9b31281D4C3";//web3.eth.accounts[0];
     let docName = elem.id;
     console.log("Delete Copyright with name: *" + docName + "* and owner add: " + ownerAdd);
     try {
@@ -45,6 +44,23 @@ window.deleteCopyright = function(elem) {
     } catch (err) {
         console.log(err);
     }
+/*
+    console.log("Deleting via /delete from M & S3")
+    $.ajax({
+      url: 'http://localhost:3000/delete/' + docName,
+      type: 'POST',
+      data: "", //new FormData( $("#uploadForm") ),
+      processData: false,
+      contentType: false,
+      success: function(msg) {
+          console.log("Delete returned: " + JSON.stringify(msg, null, 2));
+      },
+      error: function(e) {
+          console.log("Delete errored in: " + e);
+      }
+    });
+    //e.preventDefault();
+    */
 }
 
 window.addCopyright = function(docname) {
@@ -105,6 +121,7 @@ $(document).ready(function() {
             console.log("Record Count is " + contractCount);
             contractInstance.getOwner().then(function(owner){
               console.log("Owner is " + owner);
+              ownerAdd = owner[0];
             });
             for (var i = 0; i < contractCount; i++) {
                 contractInstance.getContractByIndex(i).then(function(v) {
