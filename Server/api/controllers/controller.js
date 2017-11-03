@@ -46,6 +46,10 @@ exports.remove_a_doc = function(req, res) {
                 message: 'Doc successfully deleted with name *' + docId
             });
         });
+        UTIL.delete(docId, function(data) {
+          console.log("Deleting S3 doc:--" + JSON.stringify(data, null, 4));
+        });
+
     }
 }
 

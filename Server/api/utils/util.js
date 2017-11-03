@@ -17,12 +17,31 @@ _doc.body="1234234";
 uploadDataStream(_doc);
 */
 
+/*
+_doc = new Doc;
+_doc.name="Buzz";
+_doc.body="1234234";
+deleteObject(_doc);
+*/
+
 //console.log ("UUID=" + generateUUID());
 //console.log ( "SHA256=" + encryptSHA256("235dfsaddfsadfd"));
 
 
-
 //Actual functions exported
+function deleteObject(docId,callback){
+  var deleteParams = {Bucket: 'baanda', Key: docId};
+  s3.deleteObject (deleteParams, function (err, data) {
+    if (err) {
+      console.log("Error", err);
+    } if (data) {
+      console.log("Delete Success", data);
+      return callback(data);
+    }
+  });
+}
+
+
 function encryptSHA256(_doc){
   var SHA256 = require("crypto-js/sha256");
   return SHA256(_doc.body);
@@ -31,7 +50,8 @@ function encryptSHA256(_doc){
 
 
 function uploadDataStream(doc,callback){
-  var uploadParams = {Bucket: 'baanda', Key: generateUUID(), Body: doc.body};
+  //var uploadParams = {Bucket: 'baanda', Key: generateUUID(), Body: doc.body};
+  var uploadParams = {Bucket: 'baanda', Key: doc.name, Body: doc.body};
   // call S3 to retrieve upload file to specified bucket
   s3.upload (uploadParams, function (err, data) {
     if (err) {
@@ -69,5 +89,6 @@ function generateUUID() {
      return uuid; };
 module.exports.listBuckets = listBuckets;
 module.exports.upload = uploadDataStream;
+module.exports.delete = deleteObject;
 module.exports.encryptSHA256 = encryptSHA256;
 module.exports.print = printDoc;
