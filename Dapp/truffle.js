@@ -3,7 +3,7 @@ require('babel-register')
 
 var HDWalletProvider = require("truffle-hdwallet-provider");
 
-var infura_apikey = "https://ropsten.infura.io/Yn6ooC1GML0YPlm4IDmg";
+var infura_apikey = "Yn6ooC1GML0YPlm4IDmg";
 var mnemonic = "act apple quiz random oil bronze daring upon roast vote typical dizzy";
 
 module.exports = {
