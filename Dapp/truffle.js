@@ -8,7 +8,7 @@ var mnemonic = "act apple quiz random oil bronze daring upon roast vote typical 
 
 module.exports = {
   networks: {
-    dev: {
+    development: {
       host: "localhost",
       port: 8545,
       gas: 3000000,
