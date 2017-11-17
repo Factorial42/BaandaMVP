@@ -19,40 +19,30 @@ import {
  */
 import copyright_artifacts from '../../build/contracts/Copyright.json'
 
-//var Copyright = contract(copyright_artifacts);
+var Copyright = contract(copyright_artifacts);
 //console.log ("Copyright contract is: " + JSON.stringify(copyright_artifacts.abi,null,2));
 let ownerAdd = web3.eth.accounts[0];
 //setup test records
 
 
-//Alternatively instantiate contract using the contract contractAddress
-const _theContractAddress = '0x2072fCdb10863E62121E3b7ecE99339273B8e00f';
-const Copyright = web3.eth.contract(copyright_artifacts.abi).at(_theContractAddress);
-
-//test function to access contract methods via the abi/address route
-Copyright.getContractCount(function(error, result){
-     if(!error)
-         console.log("@TEST" + JSON.stringify(result,null,2));
-     else
-         console.error(error);
- });
-
 window.deleteCopyright = function(elem) {
     let docName = elem.id;
-    console.log("Delete Copyright with name: *" + docName + "* with owner add: " + ownerAdd);
+    console.log("Delete Copyright with name: *" + docName + "* and owner add: " + ownerAdd);
     try {
         $("#msg").html("Delete copyright has been submitted for *" + docName +" *. The table will refresh once the deletion is recorded on the blockchain. Please wait...").css({
             'color': 'green',
             'font-size': '110%'
         });
 
-            Copyright.deleteContract(ownerAdd,docName,{
+        Copyright.deployed().then(function(contractInstance) {
+            contractInstance.deleteContract(ownerAdd,docName,{
                 gas: 500000,
                 from: web3.eth.accounts[0]
-            },function(error, result) {
+            }).then(function() {
             $("#msg").html("Document *" + docName + "* has been successfully deleted from blockchain!");
             removeRecord(docName);
           });
+        });
     } catch (err) {
         console.log(err);
     }
@@ -90,20 +80,22 @@ window.addCopyright = function(docname) {
          * everywhere we have a transaction call
          * todo use async-await in lieu of promise
          */
+        Copyright.deployed().then(function(contractInstance) {
             var createdTS = Math.floor(new Date() / 1000);
             var updatedTS = Math.floor(new Date() / 1000);
-            Copyright.addContract($("#docname").val(), $("#doctype").val(), $("#docurl").val(), $("#docsha").val(), createdTS, updatedTS, {
+            contractInstance.addContract($("#docname").val(), $("#doctype").val(), $("#docurl").val(), $("#docsha").val(), createdTS, updatedTS, {
                 gas: 500000,
                 from: web3.eth.accounts[0]
-            },function(error,result) {
-                return Copyright.getLastContract(function(error,v) {
+            }).then(function() {
+                return contractInstance.getLastContract().then(function(v) {
                     populateTable(v);
-                    $("#msg").html("Document *" + contractName + "* has been successfully recorded onto blockchain!");
+                    $("#msg").html("Document *" + v[0] + "* has been successfully recorded onto blockchain!");
                     clearNewRecord();
                     $("#foo").val("");
 
                 });
             });
+        });
     } catch (err) {
         console.log(err);
     }
@@ -120,25 +112,27 @@ $(document).ready(function() {
         window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
 
-    //Copyright.setProvider(web3.currentProvider);
+    Copyright.setProvider(web3.currentProvider);
     // get the length of documents on the chain
     var contractCount = 0;
 
-        Copyright.getContractCount(function(error,count) {
+    Copyright.deployed().then(function(contractInstance) {
+        contractInstance.getContractCount().then(function(count) {
             contractCount = count.toNumber();
             console.log("Record Count is " + contractCount);
-            Copyright.getOwner(function(error,owner){
+            contractInstance.getOwner().then(function(owner){
               console.log("Owner is " + owner);
               ownerAdd = owner[0];
               populateOwner(owner);
             });
             for (var i = 0; i < contractCount; i++) {
-                Copyright.getContractByIndex(i,function(error,v) {
+                contractInstance.getContractByIndex(i).then(function(v) {
                   populateTable(v);
                     //console.log(" Contract " + i + " is : " + JSON.stringify(v, null, 2));
                 });
             }
-        });
+        })
+    });
 });
 
 function populateTable(v) {
