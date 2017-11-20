@@ -16,10 +16,10 @@ const abi = JSON.parse(output.contracts[':Copyright'].interface);
 // Contract object
 const contract = web3.eth.contract(abi);
 
-console.log ("Deploying Contract ....");
+console.log("Deploying Copyright Contract ....");
 
 // Deploy contract instance
-const contractInstance = contract.new("test@test.com",{
+const contractInstance = contract.new("jit@jitty.com", {
     data: '0x' + bytecode,
     from: web3.eth.accounts[0],
     gas: 4600000
@@ -30,7 +30,7 @@ const contractInstance = contract.new("test@test.com",{
     }
 
     // Log the tx, you can explore status with eth.getTransaction()
-    console.log ("Contract transactionHash is: " + res.transactionHash);
+    console.log("Contract transactionHash is: " + res.transactionHash);
 
 
     // If we have an address property, the contract was deployed
