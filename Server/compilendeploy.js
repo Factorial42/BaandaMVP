@@ -1,6 +1,10 @@
 const fs = require('fs');
 const solc = require('solc');
 const Web3 = require('web3');
+var opn = require('opn'); //for opening the URL
+
+//redirect URL once contract address is createdTS
+const redirectURL = "http://localhost:8080/?cId=";
 
 // Connect to local Ethereum node
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
@@ -38,6 +42,9 @@ const contractInstance = contract.new("jit@jitty.com", {
         console.log('Contract address is : ' + res.address);
         // Let's test the deployed contract
         testContract(res.address);
+        console.log ("Redirecting to " + redirectURL + res.address );
+        opn(redirectURL + res.address);
+        process.exit();
     }
 });
 

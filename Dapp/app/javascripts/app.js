@@ -35,13 +35,22 @@ let ownerAdd = web3.eth.accounts[0];
 
 
 //Alternatively instantiate contract using the contract contractAddress
-const _theContractAddress = '0x6F8c4c4DD5c80C9B2c05Ab05A7A263F5472fBaC2';
+//const _theContractAddress = '0x6F8c4c4DD5c80C9B2c05Ab05A7A263F5472fBaC2';
+
+//Get the Contract Address from the request parameter
+const _theContractAddress = getUrlParameter('cId');
+console.log ("Contract Address is:" + _theContractAddress);
+
+//check if valid contract Address else throw error
+//if (! web3.utils.isAddress(_theContractAddress))
+//  console.log("Contract Address is Not a valid Address");
+
 const Copyright = web3.eth.contract(copyright_artifacts.abi).at(_theContractAddress);
 
 //test function to access contract methods via the abi/address route
 Copyright.getContractCount(function(error, result){
      if(!error)
-         console.log("@TEST" + JSON.stringify(result,null,2));
+         console.log("@ContractCount" + JSON.stringify(result,null,2));
      else
          console.error(error);
  });
@@ -101,16 +110,20 @@ window.addCopyright = function(docname) {
          */
             var createdTS = Math.floor(new Date() / 1000);
             var updatedTS = Math.floor(new Date() / 1000);
+            var _v = [$("#docname").val() , $("#doctype").val() , $("#docurl").val() , $("#docsha").val(), createdTS, updatedTS] ;
+            //console.log("@_v:" + _v);
+
             Copyright.addContract($("#docname").val(), $("#doctype").val(), $("#docurl").val(), $("#docsha").val(), createdTS, updatedTS, {
                 gas: 500000,
                 from: web3.eth.accounts[0]
             },function(error,result) {
-                return Copyright.getLastContract(function(error,v) {
-                    populateTable(v);
+                 Copyright.getLastContract(function(error,v) {
+                    //console.log ( "@LastContract:" + JSON.stringify(v,null,2));
+                    //populateTable(v);
+                    populateTable((_v));
                     $("#msg").html("Document *" + contractName + "* has been successfully recorded onto blockchain!");
                     clearNewRecord();
                     $("#foo").val("");
-
                 });
             });
     } catch (err) {
@@ -125,7 +138,7 @@ $(document).ready(function() {
 
         Copyright.getContractCount(function(error,count) {
             contractCount = count.toNumber();
-            console.log("Record Count is " + contractCount);
+            //console.log("Record Count is " + contractCount);
             Copyright.getOwner(function(error,owner){
               console.log("Owner is " + owner);
               ownerAdd = owner[0];
@@ -144,7 +157,6 @@ function populateTable(v) {
     var beginTag = "<tr id='doc_" + v[0] + "'><td>";
     var endTag = "</td></tr>";
     var midTag = "</td><td>";
-
 
     var view = "<a href='" + v[2] + "' class='btn btn-primary' target='_blank'>View</a>";
     var link = "<a href='#' id='" + v[0] + "' onclick='deleteCopyright(this);' class='btn btn-primary'>Delete</a>";
@@ -244,6 +256,20 @@ function getTS() {
     return Math.floor(new Date() / 1000);
 }
 
+function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
 //Enable for Stripe Integration
 /*
 //String functionality goes here// Create a Stripe client
