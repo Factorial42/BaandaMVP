@@ -2,10 +2,21 @@ const request = require('request');
 const fs = require('fs');
 const solc = require('solc');
 const Web3 = require('web3');
+/*
+ * Basic facade for geth fundtions to compile, deploy to blockchain and store a contract.
+ */
 
+//define a system account eth address for blockchain transactions
+const account = "0x00A0091db3062Da65950E8cDE7E5A694c8d2410E"; //on parity
+const gasPrice = "80000000";
+const gas = 4000000;
+
+//Microservice API url
+const serviceURL = "http://localhost:3000/uploadContract";
+const rpcURL = "http://localhost:8545";
 
 // Connect to local Ethereum node
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.HttpProvider(rpcURL));
 var abi = null;
 var bytecode = null;
 function deployContract(contractType, email, callback) {
@@ -18,7 +29,6 @@ function deployContract(contractType, email, callback) {
     abi = JSON.parse(output.contracts[':Copyright'].interface);
 
     const contract = new web3.eth.Contract(abi);
-    const account = "0x00A0091db3062Da65950E8cDE7E5A694c8d2410E" //on parity
 
     console.log("Deploying Copyright Contract ....");
 
@@ -26,10 +36,9 @@ function deployContract(contractType, email, callback) {
         data: '0x' + bytecode,
         arguments: [email]
     }).send({
-        //from:"0x00a0091db3062da65950e8cde7e5a694c8d2410e",
         from: account,
-        gas: 4000000,
-        gasPrice: '80000000'
+        gas: gas,
+        gasPrice: gasPrice
     }, function(error, transactionHash) {
 
     }).on('error', function(error) {
@@ -71,7 +80,7 @@ function deployContract(contractType, email, callback) {
         };
 
         var options = {
-            url: 'http://localhost:3000/uploadContract',
+            url: serviceURL,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
