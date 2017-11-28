@@ -51,7 +51,6 @@ window.addContract = function(docname) {
             type: $('#contractType :selected').text(),
             email: getUrlParameter("email")
         }, function(data) {
-
             if (typeof data == 'undefined') {
                 console.log("@contractCreated:undefined::" + data);
                 $("#msg").html(" Smart Contract could not be created at this time. Please try again later!").css({
@@ -76,7 +75,7 @@ window.addContract = function(docname) {
                 });
             } else {
                 console.log("@contractCreated:fail::" + JSON.stringify(data));
-                $("#msg").html(" Smart Contract could not be created at this time. Please try again later or contact admin(not reddy)! Error@" + data).css({
+                $("#msg").html(" Smart Contract could not be created at this time. Please try again later or contact admin(not Reddy)! Error@" + data).css({
                     'color': 'red',
                     'font-size': '110%'
                 });

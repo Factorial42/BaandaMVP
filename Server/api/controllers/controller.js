@@ -180,9 +180,12 @@ exports.create_a_contract = function(req, res) {
     if (req.body.type !== 'Copyrighting Smart Contract')
       res.status(500).send("Server doesn't support requested contract!");
     else{
-    GETH.deployContract(req.body.type,req.body.email,function(callback){
+      GETH.deployContract(req.body.type,req.body.email,function(callback){
       console.log ("@create_a_contract:deployContract:" + callback);
-      res.send(callback);
+      if (callback.contract_address)
+        res.send(callback);
+      else
+        res.send("@error" + callback);
     });
   }
 }
