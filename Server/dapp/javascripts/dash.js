@@ -72,7 +72,7 @@ window.addContract = function(docname) {
                 $("#addContract").removeClass("btn btn-primary disabled");
                 $("#addContract").addClass("btn btn-primary");
                 $("#mytable tr:last").css({
-                    backgroundColor: 'PaleTurquoise'
+                    backgroundColor: 'yellow'
                 });
             } else {
                 console.log("@contractCreated:fail::" + JSON.stringify(data));
