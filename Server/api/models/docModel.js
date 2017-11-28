@@ -4,6 +4,10 @@ var Schema = mongoose.Schema;
 
 
 var docSchema = new Schema({
+  contract_address: {
+    type: String,
+    required: 'Address of the Contract'
+  },
   name: {
     type: String,
     required: 'Name of the Document'

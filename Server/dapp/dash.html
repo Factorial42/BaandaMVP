@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Contracts Dashboard</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <link href="stylesheets/dash.css" rel="stylesheet">
+</head>
+
+<body class="container">
+    <h1>Smart Contracts Dashboard</h1><br><br>
+    <div id="header"></div>
+    <div id="third" class="table-responsive">
+        <table id="mytable" class="table table-bordered" style="width:98% !important; ">
+            <thead>
+                <tr>
+                  <th>Contract Address</th>
+                  <th>Contract Type</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="msg"></div><br>
+
+
+    <h3>Create a new Contract of Type</h3>
+      <select id="contractType">
+        <option value="1">Copyrighting Smart Contract</option>
+        <option disabled="true" value="2">Rental Agreement Smart Contract</option>
+      </select>
+    <br><br>
+
+    <a href="#" id="addContract" onclick="addContract()" class="btn btn-primary">Create new Contract</a>
+
+</body>
+<script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>-->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc1.min.js"></script>
+<!--<script src="https://js.stripe.com/v3/"></script>-->
+
+<script src="javascripts/dash.js"></script>
+</html>

@@ -26,68 +26,72 @@ if (typeof web3 !== 'undefined') {
  * to setup a Copyright abstraction. We will use this abstraction
  * later to create an instance of the Copyright contract.
  */
-import copyright_artifacts from '../../build/contracts/Copyright.json'
+//import copyright_artifacts from '../../build/contracts/Copyright.json' //- not needed since we load from mongo/db/api
 
 //var Copyright = contract(copyright_artifacts);
 //console.log ("Copyright contract is: " + JSON.stringify(copyright_artifacts.abi,null,2));
-let ownerAdd = web3.eth.accounts[0];
-//setup test records
-
-
-//Alternatively instantiate contract using the contract contractAddress
-//const _theContractAddress = '0x6F8c4c4DD5c80C9B2c05Ab05A7A263F5472fBaC2';
+let ownerAdd;
 
 //Get the Contract Address from the request parameter
 const _theContractAddress = getUrlParameter('cId');
-console.log ("Contract Address is:" + _theContractAddress);
+console.log("@contract_address:" + _theContractAddress);
+
+//var account = "0xFd4060dC3b64Ec310CaDc6d6A850B9b31281D4C3"; // on geth
+var account = "0x00A0091db3062Da65950E8cDE7E5A694c8d2410E"; //on parity
 
 //check if valid contract Address else throw error
 //if (! web3.utils.isAddress(_theContractAddress))
 //  console.log("Contract Address is Not a valid Address");
 
-const Copyright = web3.eth.contract(copyright_artifacts.abi).at(_theContractAddress);
+var abi = getABI(_theContractAddress);
+//console.log ("ABI@" + JSON.stringify(abi));
 
-//test function to access contract methods via the abi/address route
-Copyright.getContractCount(function(error, result){
-     if(!error)
-         console.log("@ContractCount" + JSON.stringify(result,null,2));
-     else
-         console.error(error);
- });
+//const Copyright =  web3.eth.contract(abi).at(_theContractAddress);
+var Copyright = new web3.eth.Contract(abi, _theContractAddress);
+
+//test functions to access contract methods via the abi/address route
+Copyright.methods.getOwner().call(function(error, result) {
+    if (!error)
+        console.log("@test-owner" + JSON.stringify(result, null, 2));
+    else
+        console.error("@test-owner" + error);
+});
 
 window.deleteCopyright = function(elem) {
     let docName = elem.id;
     console.log("Delete Copyright with name: *" + docName + "* with owner add: " + ownerAdd);
     try {
-        $("#msg").html("Delete copyright has been submitted for *" + docName +" *. The table will refresh once the deletion is recorded on the blockchain. Please wait...").css({
+        $("#msg").html("Delete copyright has been submitted for *" + docName + " *. The table will refresh once the deletion is recorded on the blockchain. Please wait...").css({
             'color': 'green',
             'font-size': '110%'
         });
 
-            Copyright.deleteContract(ownerAdd,docName,{
-                gas: 500000,
-                from: web3.eth.accounts[0]
-            },function(error, result) {
+        Copyright.methods.deleteContract(ownerAdd, docName).send({
+            gas: 500000,
+            //from: web3.eth.accounts[0]
+            from: account
+        }).on('receipt', function(receipt) {
+            console.log("@deleteContract" + receipt);
             $("#msg").html("Document *" + docName + "* has been successfully deleted from blockchain!");
             removeRecord(docName);
-          });
+        });
     } catch (err) {
         console.log(err);
     }
 
     console.log("Deleting via /delete from M & S3")
     $.ajax({
-      url: 'http://localhost:3000/delete/' + docName,
-      type: 'GET',
-      data: "", //new FormData( $("#uploadForm") ),
-      processData: false,
-      contentType: false,
-      success: function(msg) {
-          console.log("Delete returned: " + JSON.stringify(msg, null, 2));
-      },
-      error: function(e) {
-          console.log("Delete errored in: " + e);
-      }
+        url: 'http://localhost:3000/delete/' + docName,
+        type: 'GET',
+        data: "", //new FormData( $("#uploadForm") ),
+        processData: false,
+        contentType: false,
+        success: function(msg) {
+            console.log("Delete returned: " + JSON.stringify(msg, null, 2));
+        },
+        error: function(e) {
+            console.log("Delete errored in: " + e);
+        }
     });
     //e.preventDefault();
 }
@@ -108,24 +112,43 @@ window.addCopyright = function(docname) {
          * everywhere we have a transaction call
          * todo use async-await in lieu of promise
          */
-            var createdTS = Math.floor(new Date() / 1000);
-            var updatedTS = Math.floor(new Date() / 1000);
-            var _v = [$("#docname").val() , $("#doctype").val() , $("#docurl").val() , $("#docsha").val(), createdTS, updatedTS] ;
-            //console.log("@_v:" + _v);
-
-            Copyright.addContract($("#docname").val(), $("#doctype").val(), $("#docurl").val(), $("#docsha").val(), createdTS, updatedTS, {
-                gas: 500000,
-                from: web3.eth.accounts[0]
-            },function(error,result) {
-                 Copyright.getLastContract(function(error,v) {
-                    //console.log ( "@LastContract:" + JSON.stringify(v,null,2));
-                    //populateTable(v);
-                    populateTable((_v));
-                    $("#msg").html("Document *" + contractName + "* has been successfully recorded onto blockchain!");
-                    clearNewRecord();
-                    $("#foo").val("");
+        var createdTS = Math.floor(new Date() / 1000);
+        var updatedTS = Math.floor(new Date() / 1000);
+        var _v = [$("#docname").val(), $("#doctype").val(), $("#docurl").val(), $("#docsha").val(), createdTS, updatedTS];
+        //console.log("@_v:" + _v);
+        /*
+                Copyright.methods.addContract($("#docname").val(), $("#doctype").val(), $("#docurl").val(), $("#docsha").val(), createdTS, updatedTS).send({
+                    gas: 500000,
+                    //from: web3.eth.accounts[0]
+                    from: account
+                }, function(error, result) {
+                  console.log ("@addContract.send():" + error + result);
+                    Copyright.methods.getLastContract().call(function(error, v) {
+                        console.log ( "@LastContract:" + JSON.stringify(v,null,2));
+                        //populateTable(v);
+                        populateTable((_v));
+                        $("#msg").html("Document *" + contractName + "* has been successfully recorded onto blockchain!");
+                        clearNewRecord();
+                        $("#foo").val("");
+                    });
                 });
+          */
+
+        // using events
+        Copyright.methods.addContract($("#docname").val(), $("#doctype").val(), $("#docurl").val(), $("#docsha").val(), createdTS, updatedTS).send({
+            gas: 500000,
+            from: account
+        }).on('receipt', function(receipt) {
+            console.log("@addContract.send():" + receipt);
+            Copyright.methods.getLastContract().call(function(error, v) {
+                console.log("@LastContract:" + JSON.stringify(v, null, 2));
+                populateTable(v);
+                //populateTable((_v));
+                $("#msg").html("Document *" + contractName + "* has been successfully recorded onto blockchain!");
+                clearNewRecord();
+                $("#foo").val("");
             });
+        });
     } catch (err) {
         console.log(err);
     }
@@ -136,21 +159,23 @@ $(document).ready(function() {
     // get the length of documents on the chain
     var contractCount = 0;
 
-        Copyright.getContractCount(function(error,count) {
-            contractCount = count.toNumber();
-            //console.log("Record Count is " + contractCount);
-            Copyright.getOwner(function(error,owner){
-              console.log("Owner is " + owner);
-              ownerAdd = owner[0];
-              populateOwner(owner);
+    Copyright.methods.getOwner().call(function(error, result) {
+        //console.log("@Owner is: " + JSON.stringify(result));
+        ownerAdd = result[0];
+        populateOwner(result);
+    });
+
+    Copyright.methods.getContractCount().call(function(error, count) {
+        contractCount = count;
+        console.log("Record Count is " + count);
+
+        for (var i = 0; i < contractCount; i++) {
+            Copyright.methods.getContractByIndex(i).call(function(error, v) {
+                populateTable(v);
+                console.log(" Contract " + i + " is : " + JSON.stringify(v, null, 2));
             });
-            for (var i = 0; i < contractCount; i++) {
-                Copyright.getContractByIndex(i,function(error,v) {
-                  populateTable(v);
-                    //console.log(" Contract " + i + " is : " + JSON.stringify(v, null, 2));
-                });
-            }
-        });
+        }
+    });
 });
 
 function populateTable(v) {
@@ -160,19 +185,19 @@ function populateTable(v) {
 
     var view = "<a href='" + v[2] + "' class='btn btn-primary' target='_blank'>View</a>";
     var link = "<a href='#' id='" + v[0] + "' onclick='deleteCopyright(this);' class='btn btn-primary'>Delete</a>";
-    var html = beginTag + v[0] + midTag + v[1] + midTag + v[2] + midTag + v[3].substring(0,10) + "..." + midTag + new Date(v[4] * 1000).toISOString() + midTag + new Date(v[5] * 1000).toISOString()  + midTag + link + midTag + view + endTag;
+    var html = beginTag + v[0] + midTag + v[1] + midTag + v[2] + midTag + v[3].substring(0, 10) + "..." + midTag + new Date(v[4] * 1000).toISOString() + midTag + new Date(v[5] * 1000).toISOString() + midTag + link + midTag + view + endTag;
     $('#mytable tbody').append(html);
 }
 
 function populateOwner(v) {
-  jQuery("label[for='docOwner']").html('This contract is owned by address*' + v[0] + '* and email *' + v[1] + '*');
+    jQuery("label[for='docOwner']").html('This contract is owned by address*' + v[0] + '* and email *' + v[1] + '*');
 }
 
-function removeRecord(docName){
-  console.log("removing record with name: " + docName);
-//  $('#doc_' + docName).remove();
-  location.reload();
-  }
+function removeRecord(docName) {
+    console.log("removing record with name: " + docName);
+    //$('#doc_' + docName).remove();
+    location.reload();
+}
 
 
 function clearNewRecord() {
@@ -200,6 +225,7 @@ $("#foo").on("change", function(e) {
     $("#docupdatedts").val(getTS());
     var formData = new FormData();
     formData.append('foo', $('input[type=file]')[0].files[0]);
+    formData.append('contract_address', _theContractAddress);
     $.ajax({
         url: 'http://localhost:3000/upload',
         type: 'POST',
@@ -254,6 +280,17 @@ $("#foo").on("change", function() {
 
 function getTS() {
     return Math.floor(new Date() / 1000);
+}
+
+function getABI(_address) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:3000/contracts/" + _address, false);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    var response = JSON.parse(xhttp.responseText);
+    //console.log ("getABI contract_address:" + response.contract_address);
+    return response.contract_abi_artifacts;
+    //console.log ("getABI response:" + JSON.stringify(response));
 }
 
 function getUrlParameter(sParam) {

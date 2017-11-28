@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MVP - Login</title>
+    <meta content="noindex, nofollow" name="robots">
+    <link href="stylesheets/login.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/login.js"></script>
+</head>
+
+<body>
+    <img id="logo" src="images/f42.png">
+    <div id="main">
+        <!-- Create Div First For Login Form -->
+        <div id="first">
+            <form action="" method="post">
+                <h3>Login to Baanda MVP Account</h3>
+                <input id="loginemail" placeholder="Email" type="text">
+                <input id="loginpassword" placeholder="Password" type="password">
+                <input id="login" type="button" value="Sign In">
+                <p id="one"><a href="#">Forgot Password ?</a></p>
+                <p id="two">Don't have account? <a class="signup" href="#" id="signup">Sign up here</a></p>
+            </form>
+        </div>
+        <!-- Create Div Second For Signup Form-->
+        <div id="second">
+            <form action="" id="form" method="post" name="form">
+                <h3>Create new Baanda MVP Account</h3>
+                <input id="name" placeholder="Full Name" type="text">
+                <input id="registeremail" placeholder="Email" type="text">
+                <input id="registerpassword" placeholder="Password" type="password">
+                <input id="contact" placeholder="Contact Number" type="text">
+                <input id="register" type="button" value="Register">
+                <p id="two">Already have an account? <a class="signin" href="#" id="signin">Sign in</a></p>
+            </form>
+        </div>
+        <!-- Create Div Second For Signup Form-->
+        <!--<div id="third">
+            <form action="" id="form" method="post" name="form">
+                <h3>Create new Baanda MVP Account</h3>
+                <input id="name" placeholder="Full Name" type="text">
+                <input id="registeremail" placeholder="Email" type="text">
+                <input id="registerpassword" placeholder="Password" type="password">
+                <input id="contact" placeholder="Contact Number" type="text">
+                <input id="register" type="button" value="Create Baanda MVP Account">
+                <p id="two">BLAH <a class="signin" href="#" id="signin">BLU</a></p>
+            </form>
+        </div>-->
+    </div>
+</body>
+
+</html>
