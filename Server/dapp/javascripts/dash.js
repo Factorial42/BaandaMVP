@@ -75,7 +75,7 @@ window.addContract = function(docname) {
                 });
             } else {
                 console.log("@contractCreated:fail::" + JSON.stringify(data));
-                $("#msg").html(" Smart Contract could not be created at this time. Please try again later or contact admin(not Reddy)! Error@" + data).css({
+                $("#msg").html(" Smart Contract could not be created at this time. Please try again later or contact admin(not Reddy)!" + data).css({
                     'color': 'red',
                     'font-size': '110%'
                 });
