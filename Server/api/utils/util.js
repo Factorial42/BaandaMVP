@@ -21,12 +21,14 @@ uploadDataStream(_doc);
 _doc = new Doc;
 _doc.name="Buzz";
 _doc.body="1234234";
-deleteObject(_doc);
+//deleteObject(_doc);
 */
 
 //console.log ("UUID=" + generateUUID());
-//console.log ( "SHA256=" + encryptSHA256("235dfsaddfsadfd"));
+//console.log ( "SHA256=" + encryptSHA256("encryptSHA256"));
 
+//var SHA256 = require("crypto-js/sha256");
+//console.log("@sha" + SHA256("12312334"));
 
 //Actual functions exported
 function deleteObject(docId,callback){

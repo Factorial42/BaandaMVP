@@ -15,7 +15,7 @@ $.get("/contractsByEmail/" + getUrlParameter("email"),
 function populateTable(v) {
     //console.log("@populateTable:" + JSON.stringify(v));
     var beginTag = "<tr id='doc_" + v.id + "'><td>";
-    var contractIDHREF = "<a target='_blank' href='http://localhost:8080/?cId=" + v.contract_address + "'>" + v.contract_address + "</a>";
+    var contractIDHREF = "<a href='http://localhost:8080/?cId=" + v.contract_address + "'>" + v.contract_address + "</a>";
     var endTag = "</td></tr>";
     var midTag = "</td><td>";
     var html = beginTag + contractIDHREF + midTag + v.contract_name + midTag + v.created_date.substring(0, 10) + endTag;

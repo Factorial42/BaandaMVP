@@ -1,6 +1,7 @@
 const fileUpload = require('express-fileupload');
 var serveIndex = require('serve-index');
 var cors = require('cors')
+var opn = require('opn');
 
 var express = require('express'),
     app = express(),
@@ -68,6 +69,8 @@ app.get('/', function(req, res) {
 app.get('/login', function(req, res) {
     res.sendFile(__dirname + '/dapp/login.html');
 });
+
+opn('http://localhost:3000/login');
 
 /*
 app.use('/public', serveIndex('files')); // shows you the file list

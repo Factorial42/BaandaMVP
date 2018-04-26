@@ -7,7 +7,8 @@ const Web3 = require('web3');
  */
 
 //define a system account eth address for blockchain transactions
-const account = "0x00A0091db3062Da65950E8cDE7E5A694c8d2410E"; //on parity
+//const account = "0x00A0091db3062Da65950E8cDE7E5A694c8d2410E"; //on parity
+const account = "0xfd4060dc3b64ec310cadc6d6a850b9b31281d4c3"; //on geth
 const gasPrice = "80000000";
 const gas = 4000000;
 

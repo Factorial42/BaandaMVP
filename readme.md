@@ -1,7 +1,9 @@
 1: Geth Basic setup
 ********************** RUN GETH OR PARITY TO SYNC WITH ROPSTEN NETWORK *****************
 //RUN PARITY RPC
-parity --warp --chain ropsten --author "0x0048e718BF01b96C02157FB3de89C93634897Fe0" --unlock "0x0048e718BF01b96C02157FB3de89C93634897Fe0" --password "/Users/Reddy/pwd.txt" --geth --force-ui --no-persistent-txqueue
+parity --mode active --tracing off --pruning fast --db-compaction ssd --cache-size 1024  --chain ropsten --author "0x00a0091db3062da65950e8cde7e5a694c8d2410e" --unlock "0x00a0091db3062da65950e8cde7e5a694c8d2410e" --password "/Users/Reddy/pwd.txt" --geth --force-ui --no-persistent-txqueue
+
+parity --mode active --tracing off --pruning fast --db-compaction ssd --cache-size 1024 
 
 //RUN GETH RPC
 //run geth console

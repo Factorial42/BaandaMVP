@@ -4,15 +4,18 @@ const fs = require('fs');
 const solc = require('solc');
 const input = fs.readFileSync('../Dapp/contracts/Copyright.sol');
 const output = solc.compile(input.toString(), 1);
+
+console.log(output);
+
 const bytecode = output.contracts[':Copyright'].bytecode;
 const abi = JSON.parse(output.contracts[':Copyright'].interface);
 
 //var privateKey = "98efb4a587c5e98939cdda06fbabcdcaee60bfbb615f69a7a69ee16b0b30986b";
 //web3.eth.accounts.wallet.add("0x" + privateKey);
 
-var contractInstance = new web3.eth.Contract(abi,"0x19ecA898c5EE9c824854f26Cb18bAfb6a023540D");
-//var account = "0xFd4060dC3b64Ec310CaDc6d6A850B9b31281D4C3"; // on geth
-var account = "0xFd4060dC3b64Ec310CaDc6d6A850B9b31281D4C3"; // on parity
+var contractInstance = new web3.eth.Contract(abi,"0x2c77434babc06674e53111a8c2917cdc3ef15b84");
+var account = "0xfd4060dc3b64ec310cadc6d6a850b9b31281d4c3"; // on geth
+//var account = "0xFd4060dC3b64Ec310CaDc6d6A850B9b31281D4C3"; // on parity
 
 contractInstance.methods.getOwner().call(function(error, result){
   console.log("Owner is: " + JSON.stringify(result));

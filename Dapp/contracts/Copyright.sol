@@ -1,4 +1,4 @@
-pragma solidity ^ 0.4 .14;
+pragma solidity ^0.4.22;
 /**
  * @author M.Reddy <reddy@f42labs.com>
  * date: 10/22/2017
@@ -9,17 +9,17 @@ contract Copyright {
     address theOwnerAddress;
     string theOwnerEmail;
 
-    function Copyright(string _email) {
+    constructor (string _email) public {
         theOwnerAddress = msg.sender;
         theOwnerEmail = _email;
     }
 
-    function setOwner(string _email) public returns(bool) {
+    function setOwner(string _email) public returns(bool)  {
         theOwnerEmail = _email;
         return true;
     }
 
-    function getOwner() constant returns(address ownerAddress, string ownerEmail) {
+    function getOwner() public constant returns(address ownerAddress, string ownerEmail) {
         return (theOwnerAddress, theOwnerEmail);
     }
 
@@ -37,7 +37,7 @@ contract Copyright {
     }
 
     //@todo figure a way to return array in case of multiple docs, until then last matched contract with the condition is returned
-    function getContractByDate(uint256 _startDateTime, uint256 _endDateTime) public constant returns(string documentName, string documentType, string documentURL, string documentSHA, uint256 documentCreationTimestamp, uint256 documentLastUpdatedTimestamp) {
+    function getContractByDate(uint256 _startDateTime, uint256 _endDateTime) public constant returns(string documentName, string documentType, string documentURL, string documentSHA, uint256 documentCreationTimestamp, uint256 documentLastUpdatedTimestamp)  {
         for (uint i = 0; i < Documents.length; i++) {
             if (Documents[i].documentCreationTimestamp >= _startDateTime && Documents[i].documentCreationTimestamp <= _endDateTime)
               return unpackDoc(Documents[i]);
